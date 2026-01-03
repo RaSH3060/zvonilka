@@ -133,7 +133,41 @@
                         </StackPanel>
                     </materialDesign:Card>
                 </TabItem>
-            </TabControl>
+            <TabItem Header="Профиль">
+                <materialDesign:Card Padding="15" Margin="5">
+                    <StackPanel>
+                        <TextBlock Text="Профиль пользователя" FontSize="16" FontWeight="Bold"
+                                   Foreground="{StaticResource PrimaryAccentBrush}" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Имя пользователя" FontSize="13" Margin="0,0,0,5"/>
+                        <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:HintAssist.Hint="Введите ваше имя" MinHeight="32" Margin="0,0,0,15"/>
+
+                        <TextBlock Text="Аватар" FontSize="13" Margin="0,0,0,5"/>
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBox Grid.Column="0" Text="{Binding UserAvatarPath, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Путь к файлу аватара или URL" 
+                                     IsReadOnly="True" Margin="0,0,8,0" MinHeight="32"/>
+                                     
+                            <Button Grid.Column="1" Content="Выбрать" 
+                                    Command="{Binding SelectAvatarCommand}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}" 
+                                    MinWidth="80" Height="32"/>
+                        </Grid>
+                        
+                        <Button Content="Сбросить аватар" 
+                                Command="{Binding ResetAvatarCommand}"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                HorizontalAlignment="Left" Padding="12,4"/>
+                    </StackPanel>
+                </materialDesign:Card>
+            </TabItem>
+        </TabControl>
         </ScrollViewer>
 
         <!-- Buttons -->

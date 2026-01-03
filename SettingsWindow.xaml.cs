@@ -35,6 +35,8 @@ namespace Zvonilka
         private string _pushToTalkKey = "Ctrl + V";
         private string _toggleMuteKey = "Ctrl + M";
         private string _toggleDeafenKey = "Ctrl + D";
+        private string _userName = "User";
+        private string? _userAvatarPath = null;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -43,6 +45,11 @@ namespace Zvonilka
             _audioService = audioService;
             InitializeComponent();
             DataContext = this;
+            
+            // Initialize commands
+            SelectAvatarCommand = new RelayCommand(SelectAvatar);
+            ResetAvatarCommand = new RelayCommand(ResetAvatar);
+            
             Loaded += (s, e) => LoadSettings(); // Defer loading until UI is ready
         }
 
@@ -95,6 +102,10 @@ namespace Zvonilka
                 // Apply audio processing settings
                 _audioService.SetNoiseSuppression(NoiseSuppressionEnabled);
                 _audioService.SetNoiseThreshold((float)(NoiseThreshold / 100.0));
+                
+                // Load user profile settings
+                UserName = settings.UserName;
+                UserAvatarPath = settings.UserAvatarPath;
             }
             catch (Exception ex)
             {
@@ -104,8 +115,61 @@ namespace Zvonilka
             }
         }
 
+        private void SelectAvatar()
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "Image files (*.png;*.jpg;*.jpeg;*.gif;*.bmp)|*.png;*.jpg;*.jpeg;*.gif;*.bmp|All files (*.*)|*.*"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                UserAvatarPath = openFileDialog.FileName;
+            }
+        }
+
+        private void ResetAvatar()
+        {
+            UserAvatarPath = null;
+        }
+
         public System.Collections.Generic.List<string> AudioInputDevices { get; } = new();
         public System.Collections.Generic.List<string> AudioOutputDevices { get; } = new();
+
+        // User Profile Properties
+        public string UserName
+        {
+            get => _userName;
+            set
+            {
+                if (_userName != value)
+                {
+                    _userName = value;
+                    Properties.Settings.Default.UserName = value;
+                    Properties.Settings.Default.Save();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string? UserAvatarPath
+        {
+            get => _userAvatarPath;
+            set
+            {
+                if (_userAvatarPath != value)
+                {
+                    _userAvatarPath = value;
+                    Properties.Settings.Default.UserAvatarPath = value;
+                    Properties.Settings.Default.Save();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        // Commands
+        public System.Windows.Input.ICommand SelectAvatarCommand { get; private set; }
+        public System.Windows.Input.ICommand ResetAvatarCommand { get; private set; }
 
         // Optimized property setters with validation and side effects
         public string? SelectedInputDevice
