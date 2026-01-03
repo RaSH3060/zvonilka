@@ -53,36 +53,18 @@
                     <ToggleButton IsChecked="{Binding IsMuted}" Command="{Binding ToggleMuteCommand}"
                                 Style="{StaticResource MaterialDesignActionToggleButton}"
                                 ToolTip="Отключить микрофон" Width="28" Height="28" Margin="0,0,5,0">
-                        <materialDesign:PackIcon Kind="Microphone" Width="14" Height="14">
-                            <materialDesign:PackIcon.Style>
-                                <Style TargetType="materialDesign:PackIcon">
-                                    <Setter Property="Foreground" Value="{StaticResource PrimaryAccentBrush}"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsMuted}" Value="True">
-                                            <Setter Property="Foreground" Value="Red"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </materialDesign:PackIcon.Style>
-                        </materialDesign:PackIcon>
+                        <materialDesign:PackIcon Width="14" Height="14"
+                            Kind="{Binding IsMuted, Converter={StaticResource BoolToMicIconConverter}}"
+                            Foreground="{StaticResource PrimaryAccentBrush}"/>
                     </ToggleButton>
 
                     <!-- Headphones/Sound Toggle -->
                     <ToggleButton IsChecked="{Binding IsDeafened}" Command="{Binding ToggleDeafenCommand}"
                                 Style="{StaticResource MaterialDesignActionToggleButton}"
                                 ToolTip="Отключить звук" Width="28" Height="28" Margin="0,0,5,0">
-                        <materialDesign:PackIcon Kind="Headphones" Width="14" Height="14">
-                            <materialDesign:PackIcon.Style>
-                                <Style TargetType="materialDesign:PackIcon">
-                                    <Setter Property="Foreground" Value="{StaticResource PrimaryAccentBrush}"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsDeafened}" Value="True">
-                                            <Setter Property="Foreground" Value="Red"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </materialDesign:PackIcon.Style>
-                        </materialDesign:PackIcon>
+                        <materialDesign:PackIcon Width="14" Height="14"
+                            Kind="{Binding IsDeafened, Converter={StaticResource BoolToHeadphoneIconConverter}}"
+                            Foreground="{StaticResource PrimaryAccentBrush}"/>
                     </ToggleButton>
 
                     <!-- Settings -->
