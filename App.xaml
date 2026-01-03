@@ -27,6 +27,7 @@
             <local:BoolToMicIconConverter x:Key="BoolToMicIconConverter"/>
             <local:BoolToHeadphoneIconConverter x:Key="BoolToHeadphoneIconConverter"/>
             <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
 
             <!-- Material Design Dark Theme Override -->
             <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}">
