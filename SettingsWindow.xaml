@@ -1,0 +1,149 @@
+<Window x:Class="Zvonilka.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Настройки"
+        Width="550"
+        Height="480"
+        MinWidth="400"
+        MinHeight="300"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource PrimaryBackgroundBrush}"
+        Foreground="{StaticResource TextPrimaryBrush}">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+            <TextBlock Text="Настройки" FontSize="20" FontWeight="Bold"
+                       HorizontalAlignment="Center" Foreground="{StaticResource PrimaryAccentBrush}"/>
+            <TextBlock Text="Аудио, сеть и горячие клавиши" FontSize="11"
+                       HorizontalAlignment="Center" Foreground="{StaticResource TextSecondaryBrush}"/>
+        </StackPanel>
+
+        <!-- Scrollable TabControl -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <TabControl Style="{StaticResource MaterialDesignTabControl}" Padding="0">
+                <TabItem Header="Аудио">
+                    <materialDesign:Card Padding="15" Margin="5">
+                        <StackPanel>
+
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="Микрофон" FontSize="16" FontWeight="Bold"
+                                           Foreground="{StaticResource PrimaryAccentBrush}" Margin="0,0,0,10"/>
+
+                                <TextBlock Text="Устройство ввода" FontSize="13" Margin="0,0,0,5"/>
+                                <ComboBox ItemsSource="{Binding AudioInputDevices}"
+                                          SelectedItem="{Binding SelectedInputDevice}"
+                                          materialDesign:HintAssist.Hint="Микрофон..."
+                                          MinHeight="32"/>
+
+                                <TextBlock Text="Громкость микрофона" FontSize="13" Margin="0,10,0,5"/>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <materialDesign:PackIcon Kind="VolumeLow" Width="16" Height="16" Margin="0,0,8,0"/>
+                                    <Slider Value="{Binding MicrophoneVolume}" Minimum="0" Maximum="100" Width="180" Margin="0,0,8,0"/>
+                                    <materialDesign:PackIcon Kind="VolumeHigh" Width="16" Height="16" Margin="0,0,8,0"/>
+                                    <TextBlock Text="{Binding MicrophoneVolume, StringFormat='{}{0}%'}" MinWidth="30"/>
+                                </StackPanel>
+
+                                <TextBlock Text="Усиление микрофона" FontSize="13" Margin="0,10,0,5"/>
+                                <Slider Value="{Binding MicrophoneBoost}" Minimum="0" Maximum="20" TickFrequency="0.5" IsSnapToTickEnabled="True"/>
+                                <TextBlock Text="{Binding MicrophoneBoost, StringFormat='{}{0:F1} dB'}"
+                                           HorizontalAlignment="Center" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="Воспроизведение" FontSize="16" FontWeight="Bold"
+                                           Foreground="{StaticResource PrimaryAccentBrush}" Margin="0,0,0,10"/>
+
+                                <TextBlock Text="Устройство вывода" FontSize="13" Margin="0,0,0,5"/>
+                                <ComboBox ItemsSource="{Binding AudioOutputDevices}"
+                                          SelectedItem="{Binding SelectedOutputDevice}"
+                                          materialDesign:HintAssist.Hint="Наушники..."
+                                          MinHeight="32"/>
+
+                                <TextBlock Text="Громкость вывода" FontSize="13" Margin="0,10,0,5"/>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <materialDesign:PackIcon Kind="VolumeLow" Width="16" Height="16" Margin="0,0,8,0"/>
+                                    <Slider Value="{Binding OutputVolume}" Minimum="0" Maximum="100" Width="180" Margin="0,0,8,0"/>
+                                    <materialDesign:PackIcon Kind="VolumeHigh" Width="16" Height="16" Margin="0,0,8,0"/>
+                                    <TextBlock Text="{Binding OutputVolume, StringFormat='{}{0}%'}" MinWidth="30"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel>
+                                <TextBlock Text="Улучшение звука" FontSize="16" FontWeight="Bold"
+                                           Foreground="{StaticResource PrimaryAccentBrush}" Margin="0,0,0,10"/>
+
+                                <CheckBox Content="Подавление шума" IsChecked="{Binding NoiseSuppressionEnabled}" Margin="0,5"/>
+                                <StackPanel Margin="15,0,0,5" IsEnabled="{Binding NoiseSuppressionEnabled}">
+                                    <TextBlock Text="Чувствительность" FontSize="12" Margin="0,0,0,3"/>
+                                    <Slider Value="{Binding NoiseThreshold}" Minimum="0" Maximum="100"/>
+                                    <TextBlock Text="{Binding NoiseThreshold, StringFormat='{}{0}%'}"
+                                               HorizontalAlignment="Right" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </StackPanel>
+
+                                <CheckBox Content="Автоусиление (AGC)" IsChecked="{Binding AutomaticGainControl}" Margin="0,5"/>
+                                <CheckBox Content="Подавление эха" IsChecked="{Binding EchoCancellation}" Margin="0,5"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </TabItem>
+
+                <TabItem Header="Сеть">
+                    <materialDesign:Card Padding="15" Margin="5">
+                        <StackPanel>
+                            <TextBlock Text="Подключение" FontSize="16" FontWeight="Bold"
+                                       Foreground="{StaticResource PrimaryAccentBrush}" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Порт сервера" FontSize="13" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding DefaultPort, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="1024–65535" MinHeight="32"/>
+
+                            <TextBlock Text="Таймаут подключения" FontSize="13" Margin="0,10,0,5"/>
+                            <Slider Value="{Binding ConnectionTimeout}" Minimum="5" Maximum="60" TickFrequency="5" IsSnapToTickEnabled="True"/>
+                            <TextBlock Text="{Binding ConnectionTimeout, StringFormat='{}{0} сек'}"
+                                       HorizontalAlignment="Right" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}"/>
+
+                            <CheckBox Content="Авто-переподключение" IsChecked="{Binding AutoReconnect}" Margin="0,10"/>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </TabItem>
+
+                <TabItem Header="Клавиши">
+                    <materialDesign:Card Padding="15" Margin="5">
+                        <StackPanel>
+                            <TextBlock Text="Горячие клавиши" FontSize="16" FontWeight="Bold"
+                                       Foreground="{StaticResource PrimaryAccentBrush}" Margin="0,0,0,10"/>
+                            <TextBlock Text="Нажмите в поле и введите клавишу" FontSize="11"
+                                       Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Push to Talk" Margin="0,8,0,3" FontSize="12"/>
+                            <TextBox Text="{Binding PushToTalkKey}" IsReadOnly="True" MinHeight="30"
+                                     materialDesign:HintAssist.Hint="Нажмите и удерживайте..."/>
+
+                            <TextBlock Text="Отключить микрофон" Margin="0,8,0,3" FontSize="12"/>
+                            <TextBox Text="{Binding ToggleMuteKey}" IsReadOnly="True" MinHeight="30"
+                                     materialDesign:HintAssist.Hint="Нажмите для отключения..."/>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </TabItem>
+            </TabControl>
+        </ScrollViewer>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button Content="Отмена" Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Click="CancelButton_Click" MinWidth="80" Margin="0,0,8,0"/>
+            <Button Content="Применить" Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Click="ApplyButton_Click" MinWidth="80" Margin="0,0,8,0"/>
+            <Button Content="Сохранить" Style="{StaticResource MaterialDesignRaisedButton}"
+                    Click="SaveButton_Click" MinWidth="90"/>
+        </StackPanel>
+    </Grid>
+</Window>
